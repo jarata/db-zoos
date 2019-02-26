@@ -60,6 +60,28 @@ server.post('/api/zoos', async (req, res) => {
 
 });
 
+server.put('/api/zoos/:id', async (req, res) => {
+    const {id} = req.params;
+    const zooText = req.body;
+    try {
+        const zoo = await db('zoos').where({id}).first();
+        console.log('look here', zoo);
+        if (zoo) {
+            const update = await db('zoos').where({id}).update(zooText);
+            res.status(200).json(update)
+        } else {
+            res.status(404).json({
+                message: "The zoo with the specified ID does not exist."
+            })
+        }
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({
+            error: "The zoos information could not be retrieved."
+        })
+    }
+});
+
 const port = 3300;
 server.listen(port, function() {
   console.log(`\n=== Web API Listening on http://localhost:${port} ===\n`);
