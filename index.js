@@ -44,6 +44,22 @@ server.get('/api/zoos/:id', async (req, res) => {
     }
 });
 
+server.post('/api/zoos', async (req, res) => {
+    try {
+        const zoo = await db('zoos').insert(req.body);
+        res.status(201).json({
+            message: "Zoo has been created",
+            zoo
+        })
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({
+            error: "The zoos information could not be retrieved."
+        })
+    }
+
+});
+
 const port = 3300;
 server.listen(port, function() {
   console.log(`\n=== Web API Listening on http://localhost:${port} ===\n`);
